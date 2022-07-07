@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ramos.InCalifornia.domain.member.entity.AppMember;
 import ramos.InCalifornia.domain.member.entity.Role;
+import ramos.InCalifornia.domain.member.exception.AnonymousHasNotIdException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -31,7 +32,7 @@ public class AppMemberTest {
 
         //when, then
         assertThatThrownBy(() -> anonymous.getId())
-                .isInstanceOf(RuntimeException.class);
+                .isInstanceOf(AnonymousHasNotIdException.class);
     }
 
     @Test
