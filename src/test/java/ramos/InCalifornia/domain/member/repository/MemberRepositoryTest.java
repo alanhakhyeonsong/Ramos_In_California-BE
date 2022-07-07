@@ -3,7 +3,7 @@ package ramos.InCalifornia.domain.member.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import ramos.InCalifornia.domain.member.entity.Authority;
+import ramos.InCalifornia.domain.member.entity.Role;
 import ramos.InCalifornia.domain.member.entity.Member;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,7 +21,7 @@ public class MemberRepositoryTest {
                 .email("songs4805@naver.com")
                 .nickname("Ramos")
                 .password("test")
-                .authority(Authority.ROLE_ADMIN)
+                .role(Role.ROLE_ADMIN)
                 .build();
 
         //when
@@ -29,5 +29,6 @@ public class MemberRepositoryTest {
 
         //then
         assertThat(savedMember.getNickname()).isEqualTo(member.getNickname());
+        assertThat(savedMember.getRole()).isEqualTo(member.getRole());
     }
 }
