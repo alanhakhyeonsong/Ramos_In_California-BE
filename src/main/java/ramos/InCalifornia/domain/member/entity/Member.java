@@ -48,4 +48,22 @@ public class Member extends BaseEntity {
     public boolean isSameNickname(Member another) {
         return Objects.equals(this.nickname, another.getNickname());
     }
+
+    public boolean isSamePassword(Member another) {
+        return Objects.equals(this.password, another.getPassword());
+    }
+
+    public void updateNickname(Member another) {
+        if (isSameNickname(another)) {
+            throw new RuntimeException("이미 존재하는 닉네임입니다.");
+        }
+        this.nickname = another.getNickname();
+    }
+
+    public void updatePassword(Member another) {
+        if (isSamePassword(another)) {
+            throw new RuntimeException("패스워드가 이전과 같습니다.");
+        }
+        this.password = another.getPassword();
+    }
 }
