@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import ramos.InCalifornia.domain.member.entity.Member;
 import ramos.InCalifornia.domain.member.entity.Role;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.*;
 
 public class MemberTest {
 
@@ -57,6 +56,7 @@ public class MemberTest {
     }
 
     @Test
+    @DisplayName("nickname 변경 성공")
     void updateNicknameSuccess() {
         //given
         Member member = Member.builder()
@@ -67,38 +67,95 @@ public class MemberTest {
                 .role(Role.ROLE_ADMIN)
                 .build();
 
+        Member updateMember = Member.builder()
+                .id(1L)
+                .email("songs4805@naver.com")
+                .nickname("Sergio Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
         //when
-        String newNickname = "Sergio Ramos";
+        member.updateNickname(updateMember);
 
         //then
-        assertThat(member.getNickname()).isEqualTo(newNickname);
+        assertThat(member.getNickname()).isEqualTo(updateMember.getNickname());
     }
 
     @Test
     @DisplayName("nickname이 중복일 경우 변경 불가")
     void updateNicknameFail() {
         //given
+        Member member = Member.builder()
+                .id(1L)
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
 
-        //when
+        Member updateMember = Member.builder()
+                .id(1L)
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
 
-        //then
+        //when, then
+        assertThatThrownBy(() -> member.updateNickname(updateMember))
+                .isInstanceOf(RuntimeException.class);
     }
 
     @Test
+    @DisplayName("password 변경 성공")
     void updatePasswordSuccess() {
         //given
+        Member member = Member.builder()
+                .id(1L)
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        Member updateMember = Member.builder()
+                .id(1L)
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test2")
+                .role(Role.ROLE_ADMIN)
+                .build();
 
         //when
+        member.updatePassword(updateMember);
 
         //then
+        assertThat(member.getPassword()).isEqualTo(updateMember.getPassword());
     }
 
     @Test
+    @DisplayName("이전 password와 같을 경우 변경 불가")
     void updatePasswordFail() {
         //given
+        Member member = Member.builder()
+                .id(1L)
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
 
-        //when
+        Member updateMember = Member.builder()
+                .id(1L)
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
 
-        //then
+        //when, then
+        assertThatThrownBy(() -> member.updatePassword(updateMember))
+                .isInstanceOf(RuntimeException.class);
     }
 }
