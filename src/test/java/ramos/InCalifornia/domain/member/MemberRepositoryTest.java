@@ -1,10 +1,11 @@
-package ramos.InCalifornia.domain.member.repository;
+package ramos.InCalifornia.domain.member;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import ramos.InCalifornia.domain.member.entity.Role;
 import ramos.InCalifornia.domain.member.entity.Member;
+import ramos.InCalifornia.domain.member.repository.MemberRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,5 +31,6 @@ public class MemberRepositoryTest {
         //then
         assertThat(savedMember.getNickname()).isEqualTo(member.getNickname());
         assertThat(savedMember.getRole()).isEqualTo(member.getRole());
+        assertThat(savedMember.getId()).isEqualTo(1L);
     }
 }
