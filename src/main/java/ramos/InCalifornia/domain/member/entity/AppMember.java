@@ -3,6 +3,7 @@ package ramos.InCalifornia.domain.member.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import ramos.InCalifornia.domain.member.exception.AnonymousHasNotIdException;
 
 import static ramos.InCalifornia.domain.member.entity.Role.*;
 
@@ -33,7 +34,7 @@ public class AppMember {
 
     public long getId() {
         if (isAnonymous()) {
-            throw new RuntimeException("비회원의 ID는 조회 불가");
+            throw new AnonymousHasNotIdException();
         }
         return id;
     }

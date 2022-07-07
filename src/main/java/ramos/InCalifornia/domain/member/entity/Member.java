@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ramos.InCalifornia.domain.BaseEntity;
+import ramos.InCalifornia.domain.member.exception.NicknameDuplicateException;
+import ramos.InCalifornia.domain.member.exception.PasswordDuplicateException;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -55,14 +57,14 @@ public class Member extends BaseEntity {
 
     public void updateNickname(Member another) {
         if (isSameNickname(another)) {
-            throw new RuntimeException("이미 존재하는 닉네임입니다.");
+            throw new NicknameDuplicateException();
         }
         this.nickname = another.getNickname();
     }
 
     public void updatePassword(Member another) {
         if (isSamePassword(another)) {
-            throw new RuntimeException("패스워드가 이전과 같습니다.");
+            throw new PasswordDuplicateException();
         }
         this.password = another.getPassword();
     }
