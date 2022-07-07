@@ -4,18 +4,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import ramos.InCalifornia.domain.BaseEntity;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Entity
 @Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
-    private Long id;
+public class Member extends BaseEntity {
 
     @Column(name = "member_email", nullable = false, unique = true)
     private String email;
@@ -28,7 +26,8 @@ public class Member {
     private Role role;
 
     @Builder
-    public Member(String email, String password, String nickname, Role role) {
+    public Member(Long id, String email, String password, String nickname, Role role) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
@@ -42,4 +41,11 @@ public class Member {
                 .build();
     }
 
+    public boolean isSameEmail(Member another) {
+        return Objects.equals(this.email, another.getEmail());
+    }
+
+    public boolean isSameNickname(Member another) {
+        return Objects.equals(this.nickname, another.getNickname());
+    }
 }
