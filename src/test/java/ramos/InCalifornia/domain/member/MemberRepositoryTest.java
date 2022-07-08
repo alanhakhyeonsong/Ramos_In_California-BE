@@ -16,7 +16,7 @@ public class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @Test
-    public void 회원등록_테스트() throws Exception {
+    void 회원등록_테스트() {
         //given
         Member member = Member.builder()
                 .email("songs4805@naver.com")
@@ -32,5 +32,25 @@ public class MemberRepositoryTest {
         assertThat(savedMember.getNickname()).isEqualTo(member.getNickname());
         assertThat(savedMember.getRole()).isEqualTo(member.getRole());
         assertThat(savedMember.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void 이메일로_조회() {
+        //given
+        Member member = Member.builder()
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        memberRepository.save(member);
+
+        //when
+        Member result = memberRepository.findByEmail(member.getEmail()).orElseThrow();
+
+        //then
+        assertThat(result.getEmail()).isEqualTo(member.getEmail());
+
     }
 }
