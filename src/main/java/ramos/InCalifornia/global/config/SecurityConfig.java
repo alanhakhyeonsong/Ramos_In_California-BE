@@ -1,5 +1,7 @@
 package ramos.InCalifornia.global.config;
 
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,16 +12,26 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import ramos.InCalifornia.global.config.jwt.JwtSecurityConfig;
+import ramos.InCalifornia.global.config.jwt.JwtTokenProvider;
 
 import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
     }
 
     @Bean
@@ -58,7 +70,9 @@ public class SecurityConfig {
                 .logout().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint())
-                .accessDeniedHandler(accessDeniedHandler());
+                .accessDeniedHandler(accessDeniedHandler())
+                .and()
+                .apply(new JwtSecurityConfig(jwtTokenProvider));
 
         return http.build();
     }
