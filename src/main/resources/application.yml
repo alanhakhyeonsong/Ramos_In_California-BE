@@ -12,6 +12,9 @@ spring:
       hibernate:
         format_sql: true
 
+  config:
+    import: classpath:/application-jwt.yml
+
 logging:
   level:
     org.hibernate.SQL: debug
