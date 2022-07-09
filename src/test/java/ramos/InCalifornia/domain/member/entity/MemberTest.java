@@ -1,9 +1,7 @@
-package ramos.InCalifornia.domain.member;
+package ramos.InCalifornia.domain.member.entity;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ramos.InCalifornia.domain.member.entity.Member;
-import ramos.InCalifornia.domain.member.entity.Role;
 import ramos.InCalifornia.domain.member.exception.NicknameDuplicateException;
 import ramos.InCalifornia.domain.member.exception.PasswordDuplicateException;
 

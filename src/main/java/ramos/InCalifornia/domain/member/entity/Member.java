@@ -66,6 +66,10 @@ public class Member extends BaseEntity {
         if (isSamePassword(another)) {
             throw new PasswordDuplicateException();
         }
-        this.password = another.getPassword();
+        setEncryptedPassword(another.getPassword());
+    }
+
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.password = encryptedPassword;
     }
 }

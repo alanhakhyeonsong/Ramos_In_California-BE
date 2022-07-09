@@ -1,9 +1,7 @@
-package ramos.InCalifornia.domain.member;
+package ramos.InCalifornia.domain.member.entity;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ramos.InCalifornia.domain.member.entity.AppMember;
-import ramos.InCalifornia.domain.member.entity.Role;
 import ramos.InCalifornia.domain.member.exception.AnonymousHasNotIdException;
 
 import static org.assertj.core.api.Assertions.assertThat;

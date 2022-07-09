@@ -11,6 +11,8 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "C001", "internal server error"),
     INVALID_TYPE_VALUE(400, "C002", "invalid type value"),
     ANONYMOUS_HAS_NOT_ID(500, "C003", "비회원의 ID는 조회 불가"),
+    BAD_CREDENTIALS(400, "C004", "bad credentials"),
+    METHOD_NOT_ALLOWED(405, "C005", "method not allowed"),
 
 
     // Member
