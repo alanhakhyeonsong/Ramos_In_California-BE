@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import ramos.InCalifornia.domain.member.entity.AuthMember;
@@ -25,9 +24,6 @@ public class JwtTokenProviderTest {
 
     @Mock
     UserDetailsService userDetailsService;
-
-    @Mock
-    ModelMapper modelMapper;
 
     @Test
     void 토큰_생성() {
@@ -87,8 +83,8 @@ public class JwtTokenProviderTest {
         Authentication authentication = jwtTokenProvider.getAuthentication(token);
 
         //then
-        AuthMember m = (AuthMember) authentication.getPrincipal();
-        Member memberInToken = m.getMember();
+        AuthMember principal = (AuthMember) authentication.getPrincipal();
+        Member memberInToken = principal.getMember();
         assertThat(memberInToken.getEmail()).isEqualTo(member.getEmail());
     }
 
