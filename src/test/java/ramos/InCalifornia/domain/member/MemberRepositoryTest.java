@@ -53,4 +53,40 @@ public class MemberRepositoryTest {
         assertThat(result.getEmail()).isEqualTo(member.getEmail());
 
     }
+
+    @Test
+    void 이메일로_존재_여부_확인() {
+        //given
+        Member member = Member.builder()
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        //when
+        memberRepository.save(member);
+        boolean result = memberRepository.existsByEmail(member.getEmail());
+
+        //then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void 닉네임으로_존재_여부_확인() {
+        //given
+        Member member = Member.builder()
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        //when
+        memberRepository.save(member);
+        boolean result = memberRepository.existsByNickname(member.getNickname());
+
+        //then
+        assertThat(result).isTrue();
+    }
 }
