@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ramos.InCalifornia.domain.auth.dto.*;
 import ramos.InCalifornia.domain.auth.service.AuthService;
-import ramos.InCalifornia.domain.member.entity.AppMember;
+import ramos.InCalifornia.domain.member.entity.AuthMember;
 import ramos.InCalifornia.global.config.jwt.TokenDto;
 import ramos.InCalifornia.global.result.ResultCode;
 import ramos.InCalifornia.global.result.ResultResponse;
@@ -39,8 +39,8 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<ResultResponse> reIssue(@AuthenticationPrincipal AppMember appMember, @Valid @RequestBody ReissueRequest dto) {
-        TokenDto tokenDto = authService.reissue(appMember.getRole().toString(), dto);
+    public ResponseEntity<ResultResponse> reIssue(@AuthenticationPrincipal AuthMember authMember, @Valid @RequestBody ReissueRequest dto) {
+        TokenDto tokenDto = authService.reissue(authMember.getMember().getRole().toString(), dto);
         ResultResponse result = ResultResponse.of(ResultCode.REISSUE_SUCCESS, tokenDto);
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
