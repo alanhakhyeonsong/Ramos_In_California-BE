@@ -36,13 +36,6 @@ public class Member extends BaseEntity {
         this.role = role;
     }
 
-    public AppMember toAppMember() {
-        return AppMember.builder()
-                .id(id)
-                .role(role)
-                .build();
-    }
-
     public boolean isSameEmail(Member another) {
         return Objects.equals(this.email, another.getEmail());
     }
