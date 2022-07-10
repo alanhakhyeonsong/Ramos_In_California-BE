@@ -13,6 +13,7 @@ import static ramos.InCalifornia.domain.member.entity.Role.*;
 public class AppMember {
 
     private Long id;
+    private String email;
     private Role role;
 
     public static AppMember anonymous() {
@@ -41,5 +42,9 @@ public class AppMember {
 
     public Role getRole() {
         return role;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }
