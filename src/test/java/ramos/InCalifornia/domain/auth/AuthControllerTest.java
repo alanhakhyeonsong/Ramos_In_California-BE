@@ -3,17 +3,23 @@ package ramos.InCalifornia.domain.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ramos.InCalifornia.domain.auth.controller.AuthController;
 import ramos.InCalifornia.domain.auth.dto.LoginRequest;
 import ramos.InCalifornia.domain.auth.dto.ReissueRequest;
 import ramos.InCalifornia.domain.auth.service.AuthService;
+import ramos.InCalifornia.domain.member.entity.AuthMember;
+import ramos.InCalifornia.domain.member.entity.Role;
 import ramos.InCalifornia.global.config.jwt.TokenDto;
 import ramos.InCalifornia.support.TokenTestHelper;
+import ramos.InCalifornia.support.WithMockAuthUser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +30,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = AuthController.class)
+@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class AuthControllerTest {
 
     @Autowired
@@ -34,7 +41,9 @@ public class AuthControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
-    @Mock
+    private AuthMember authMember;
+
+    @MockBean
     AuthService authService;
 
     @Test
@@ -125,8 +134,10 @@ public class AuthControllerTest {
                 .andDo(print());
     }
 
+
     @Test
     @DisplayName("토큰 재발급 성공")
+    @WithMockAuthUser(email = "test@test.com", id = 1L, role = Role.ROLE_USER)
     void tokenReissue() throws Exception {
         //given
         TokenDto token = getToken();
@@ -134,7 +145,7 @@ public class AuthControllerTest {
         input.put("accessToken", token.getAccessToken());
         input.put("refreshToken", token.getRefreshToken());
 
-        given(authService.reissue(any(ReissueRequest.class))).willReturn(token);
+        given(authService.reissue(any(String.class), any(ReissueRequest.class))).willReturn(token);
 
         //andExpect
         mockMvc.perform(post("/auth/reissue")

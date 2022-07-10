@@ -3,12 +3,14 @@ package ramos.InCalifornia.domain.auth.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ramos.InCalifornia.domain.auth.dto.*;
 import ramos.InCalifornia.domain.auth.service.AuthService;
+import ramos.InCalifornia.domain.member.entity.AuthMember;
 import ramos.InCalifornia.global.config.jwt.TokenDto;
 import ramos.InCalifornia.global.result.ResultCode;
 import ramos.InCalifornia.global.result.ResultResponse;
@@ -37,8 +39,8 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<ResultResponse> reIssue(@Valid @RequestBody ReissueRequest dto) {
-        TokenDto tokenDto = authService.reissue(dto);
+    public ResponseEntity<ResultResponse> reIssue(@AuthenticationPrincipal AuthMember authMember, @Valid @RequestBody ReissueRequest dto) {
+        TokenDto tokenDto = authService.reissue(authMember.getMember().getRole().toString(), dto);
         ResultResponse result = ResultResponse.of(ResultCode.REISSUE_SUCCESS, tokenDto);
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
