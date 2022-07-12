@@ -13,6 +13,7 @@ import ramos.InCalifornia.domain.auth.exception.MemberAlreadyExistException;
 import ramos.InCalifornia.domain.auth.exception.TokenExpiredException;
 import ramos.InCalifornia.domain.member.entity.Member;
 import ramos.InCalifornia.domain.member.exception.MemberNotFoundException;
+import ramos.InCalifornia.domain.member.exception.NicknameDuplicateException;
 import ramos.InCalifornia.domain.member.repository.MemberRepository;
 import ramos.InCalifornia.global.config.jwt.JwtTokenProvider;
 import ramos.InCalifornia.global.config.jwt.TokenDto;
@@ -30,7 +31,7 @@ public class AuthService {
 
     @Transactional
     public MemberResponse signUp(SignUpRequest dto) {
-        checkAlreadyExists(dto.getEmail());
+        checkAlreadyExists(dto.getEmail(), dto.getNickname());
 
         Member member = dto.toEntity();
         String encryptedPassword = bCryptPasswordEncoder.encode(member.getPassword());
@@ -40,9 +41,11 @@ public class AuthService {
         return MemberResponse.of(save);
     }
 
-    private void checkAlreadyExists(String email) {
+    private void checkAlreadyExists(String email, String nickname) {
         if (memberRepository.existsByEmail(email)) {
             throw new MemberAlreadyExistException();
+        } else if (memberRepository.existsByNickname(nickname)) {
+            throw new NicknameDuplicateException();
         }
     }
 
