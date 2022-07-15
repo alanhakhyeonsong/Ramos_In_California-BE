@@ -1,5 +1,7 @@
 package ramos.InCalifornia.domain.member;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,8 +20,14 @@ public class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
 
+    @AfterEach
+    void tearDown() {
+        memberRepository.deleteAll();
+    }
+
     @Test
-    void 회원등록_테스트() {
+    @DisplayName("회원등록 테스트")
+    void createMember() {
         //given
         Member member = Member.builder()
                 .email("songs4805@naver.com")
@@ -34,11 +42,12 @@ public class MemberRepositoryTest {
         //then
         assertThat(savedMember.getNickname()).isEqualTo(member.getNickname());
         assertThat(savedMember.getRole()).isEqualTo(member.getRole());
-        assertThat(savedMember.getId()).isEqualTo(1L);
+        assertThat(savedMember.getId()).isNotNull();
     }
 
     @Test
-    void 이메일로_조회() {
+    @DisplayName("이메일로 회원 조회")
+    void findByEmail() {
         //given
         Member member = Member.builder()
                 .email("songs4805@naver.com")
@@ -58,7 +67,8 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    void 이메일로_존재_여부_확인() {
+    @DisplayName("이메일로 존재 여부 확인")
+    void existsByEmail() {
         //given
         Member member = Member.builder()
                 .email("songs4805@naver.com")
@@ -76,7 +86,8 @@ public class MemberRepositoryTest {
     }
 
     @Test
-    void 닉네임으로_존재_여부_확인() {
+    @DisplayName("닉네임으로 존재 여부 확인")
+    void existsByNickname() {
         //given
         Member member = Member.builder()
                 .email("songs4805@naver.com")
