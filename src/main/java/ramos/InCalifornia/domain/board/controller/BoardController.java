@@ -3,6 +3,7 @@ package ramos.InCalifornia.domain.board.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
@@ -18,6 +19,7 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/board")
     public ResponseEntity<ResultResponse> enroll(@RequestBody EnrollRequest dto,
                                                  @AuthenticationPrincipal AuthMember authMember) {
