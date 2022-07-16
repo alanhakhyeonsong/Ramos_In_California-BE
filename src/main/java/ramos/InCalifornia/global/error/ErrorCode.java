@@ -26,7 +26,8 @@ public enum ErrorCode {
     PASSWORD_DUPLICATED(400, "M003", "이전과 같은 비밀번호입니다."),
 
     // Board
-    BOARD_NOT_FOUND(404, "B001", "게시글을 찾을 수 없습니다.");
+    BOARD_NOT_FOUND(404, "B001", "게시글을 찾을 수 없습니다."),
+    NOT_WRITER(401, "B002", "작성자가 아닙니다.");
 
     private int status;
     private String code;
