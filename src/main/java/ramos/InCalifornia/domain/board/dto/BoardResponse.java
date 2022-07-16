@@ -1,6 +1,6 @@
 package ramos.InCalifornia.domain.board.dto;
 
-import lombok.AllArgsConstructor;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ramos.InCalifornia.domain.board.entity.Board;
@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class BoardResponse {
 
     private Long id;
@@ -26,5 +25,15 @@ public class BoardResponse {
 
     public static BoardResponse of(Board board) {
         return new BoardResponse(board.getId(), board.getTitle(), board.getContents(), board.getUpdatedAt(), board.getMember().getId(), board.getMember().getNickname());
+    }
+
+    @QueryProjection
+    public BoardResponse(Long boardId, String title, String content, LocalDateTime updatedAt, Long memberId, String writer) {
+        this.id = boardId;
+        this.title = title;
+        this.content = content;
+        this.updatedAt = updatedAt;
+        this.memberId = memberId;
+        this.writer = writer;
     }
 }
