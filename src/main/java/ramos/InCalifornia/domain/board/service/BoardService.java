@@ -1,6 +1,8 @@
 package ramos.InCalifornia.domain.board.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
@@ -64,5 +66,9 @@ public class BoardService {
         Member writer = findMember(authMember);
         Board board = findWriter(id, writer);
         boardRepository.deleteById(id);
+    }
+
+    public Page<BoardResponse> findAll(Pageable pageable) {
+        return boardRepository.findAllBoardWithPaging(pageable);
     }
 }

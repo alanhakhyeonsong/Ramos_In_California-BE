@@ -1,6 +1,8 @@
 package ramos.InCalifornia.domain.board.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +22,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/board")
+    @PostMapping("/boards")
     public ResponseEntity<ResultResponse> enroll(@RequestBody EnrollRequest dto,
                                                  @AuthenticationPrincipal AuthMember authMember) {
         BoardResponse responseDto = boardService.create(dto, authMember);
@@ -28,14 +30,14 @@ public class BoardController {
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
 
-    @GetMapping("/board/{id}")
+    @GetMapping("/boards/{id}")
     public ResponseEntity<ResultResponse> findById(@PathVariable Long id) {
         BoardResponse responseDto = boardService.findById(id);
         ResultResponse result = ResultResponse.of(ResultCode.FIND_BOARD_SUCCESS, responseDto);
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
 
-    @PutMapping("/board/{id}")
+    @PutMapping("/boards/{id}")
     public ResponseEntity<ResultResponse> edit(@PathVariable Long id,
                      @RequestBody EnrollRequest dto,
                      @AuthenticationPrincipal AuthMember authMember) {
@@ -44,11 +46,18 @@ public class BoardController {
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
 
-    @DeleteMapping("/board/{id}")
+    @DeleteMapping("/boards/{id}")
     public ResponseEntity<ResultResponse> delete(@PathVariable Long id,
                        @AuthenticationPrincipal AuthMember authMember) {
         boardService.delete(id, authMember);
         ResultResponse result = ResultResponse.of(ResultCode.DELETE_BOARD_SUCCESS);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/boards")
+    public ResponseEntity<ResultResponse> findAll(Pageable pageable) {
+        Page<BoardResponse> response = boardService.findAll(pageable);
+        ResultResponse result = ResultResponse.of(ResultCode.FIND_BOARD_SUCCESS, response);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
