@@ -4,11 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ramos.InCalifornia.domain.board.controller.BoardController;
@@ -46,6 +49,12 @@ public class BoardControllerTest {
     @MockBean
     BoardService boardService;
 
+    @Mock
+    private Pageable pageableMock;
+
+    @Mock
+    Page<BoardResponse> boardResponsePage;
+
     @Test
     @DisplayName("게시글 등록 성공")
     @WithMockAuthUser(id = 1L, email = "test@test.com", role = Role.ROLE_ADMIN)
@@ -68,7 +77,6 @@ public class BoardControllerTest {
                 .andDo(print());
     }
 
-    // 단일 조회
     @Test
     @DisplayName("boardId로 단일 조회 성공")
     void findByBoardIdSuccess() throws Exception {
@@ -84,7 +92,6 @@ public class BoardControllerTest {
                 .andDo(print());
     }
 
-    // 수정
     @Test
     @DisplayName("게시글 수정 성공")
     @WithMockAuthUser(id = 1L, email = "test@test.com", role = Role.ROLE_ADMIN)
@@ -107,7 +114,6 @@ public class BoardControllerTest {
                 .andDo(print());
     }
 
-    // 삭제
     @Test
     @DisplayName("게시글 삭제 성공")
     void deleteBoardSuccess() throws Exception {
@@ -121,5 +127,16 @@ public class BoardControllerTest {
                 .andDo(print());
     }
 
-    // 페이징 목록 조회
+    @Test
+    @DisplayName("게시글 전체 조회, 페이징 처리")
+    void findAll() throws Exception {
+        //given
+        given(boardService.findAll(pageableMock)).willReturn(boardResponsePage);
+
+        //andExpect
+        mockMvc.perform(
+                        get("/boards"))
+                .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
 }
