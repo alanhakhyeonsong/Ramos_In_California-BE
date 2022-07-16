@@ -18,6 +18,7 @@ import ramos.InCalifornia.domain.member.entity.Role;
 import ramos.InCalifornia.domain.member.repository.MemberRepository;
 import ramos.InCalifornia.global.config.jwt.JwtTokenProvider;
 import ramos.InCalifornia.global.config.jwt.TokenDto;
+import ramos.InCalifornia.global.config.redis.RedisService;
 
 import java.util.Optional;
 
@@ -40,6 +41,9 @@ public class AuthServiceTest {
 
     @Mock
     PasswordEncoder passwordEncoder;
+
+    @Mock
+    RedisService redisService;
 
     @Test
     @DisplayName("회원가입 성공")
@@ -107,7 +111,7 @@ public class AuthServiceTest {
         given(tokenProvider.createAccessToken(email, role)).willReturn(accessToken);
 
         //when
-        TokenDto token = authService.reissue(dto);
+        TokenDto token = authService.reissue(role, dto);
 
         //then
         assertThat(token.getAccessToken()).isNotEqualTo(dto.getAccessToken());
