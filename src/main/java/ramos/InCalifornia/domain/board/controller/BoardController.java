@@ -1,6 +1,8 @@
 package ramos.InCalifornia.domain.board.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -49,6 +51,13 @@ public class BoardController {
                        @AuthenticationPrincipal AuthMember authMember) {
         boardService.delete(id, authMember);
         ResultResponse result = ResultResponse.of(ResultCode.DELETE_BOARD_SUCCESS);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/boards")
+    public ResponseEntity<ResultResponse> findAll(Pageable pageable) {
+        Page<BoardResponse> response = boardService.findAll(pageable);
+        ResultResponse result = ResultResponse.of(ResultCode.FIND_BOARD_SUCCESS, response);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
