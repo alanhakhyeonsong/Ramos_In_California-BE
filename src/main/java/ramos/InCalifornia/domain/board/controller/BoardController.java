@@ -20,7 +20,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/board")
+    @PostMapping("/boards")
     public ResponseEntity<ResultResponse> enroll(@RequestBody EnrollRequest dto,
                                                  @AuthenticationPrincipal AuthMember authMember) {
         BoardResponse responseDto = boardService.create(dto, authMember);
@@ -28,14 +28,14 @@ public class BoardController {
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
 
-    @GetMapping("/board/{id}")
+    @GetMapping("/boards/{id}")
     public ResponseEntity<ResultResponse> findById(@PathVariable Long id) {
         BoardResponse responseDto = boardService.findById(id);
         ResultResponse result = ResultResponse.of(ResultCode.FIND_BOARD_SUCCESS, responseDto);
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
 
-    @PutMapping("/board/{id}")
+    @PutMapping("/boards/{id}")
     public ResponseEntity<ResultResponse> edit(@PathVariable Long id,
                      @RequestBody EnrollRequest dto,
                      @AuthenticationPrincipal AuthMember authMember) {
@@ -44,7 +44,7 @@ public class BoardController {
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
 
-    @DeleteMapping("/board/{id}")
+    @DeleteMapping("/boards/{id}")
     public ResponseEntity<ResultResponse> delete(@PathVariable Long id,
                        @AuthenticationPrincipal AuthMember authMember) {
         boardService.delete(id, authMember);

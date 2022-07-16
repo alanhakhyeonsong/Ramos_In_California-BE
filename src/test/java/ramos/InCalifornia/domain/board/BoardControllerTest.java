@@ -61,7 +61,7 @@ public class BoardControllerTest {
 
         //andExpect
         mockMvc.perform(
-                post("/board")
+                post("/boards")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(input)))
                 .andExpect(status().is2xxSuccessful())
@@ -79,7 +79,7 @@ public class BoardControllerTest {
 
         //andExpect
         mockMvc.perform(
-                get("/board/{id}", 1L))
+                get("/boards/{id}", 1L))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
     }
@@ -100,7 +100,7 @@ public class BoardControllerTest {
 
         //andExpect
         mockMvc.perform(
-                put("/board/{id}", 1L)
+                put("/boards/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(input)))
                 .andExpect(status().is2xxSuccessful())
@@ -116,7 +116,7 @@ public class BoardControllerTest {
 
         //andExpect
         mockMvc.perform(
-                delete("/board/{id}", 1L))
+                delete("/boards/{id}", 1L))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
     }
