@@ -61,4 +61,39 @@ public class BoardTest {
         assertThat(board.getContents()).isNotEqualTo(anotherBoard.getContents());
         assertThat(board.getMember()).isEqualTo(anotherBoard.getMember());
     }
+
+    @Test
+    @DisplayName("Board 수정 - 성공")
+    void editBoard() {
+        //given
+        Member member = Member.builder()
+                .id(1L)
+                .email("songs4805@naver.com")
+                .nickname("Ramos")
+                .password("test")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        Board board = Board.builder()
+                .id(1L)
+                .title("title test")
+                .contents("contents test")
+                .member(member)
+                .build();
+
+        Board anotherBoard = Board.builder()
+                .id(1L)
+                .title("title 수정")
+                .contents("contents 수정")
+                .member(member)
+                .build();
+
+        //when
+        board.editBoard(anotherBoard.getTitle(), anotherBoard.getContents());
+
+        //then
+        assertThat(board.getTitle()).isEqualTo(anotherBoard.getTitle());
+        assertThat(board.getContents()).isEqualTo(anotherBoard.getContents());
+        assertThat(board.getMember()).isEqualTo(anotherBoard.getMember());
+    }
 }
