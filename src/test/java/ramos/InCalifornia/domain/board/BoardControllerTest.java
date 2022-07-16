@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ramos.InCalifornia.support.BoardTestHelper.givenBoard;
 
 
 @WebMvcTest(controllers = BoardController.class)
@@ -53,7 +54,7 @@ public class BoardControllerTest {
         input.put("title", "게시글 제목 테스트");
         input.put("contents", "게시글 본문 테스트");
 
-        BoardResponse board = new BoardResponse();
+        BoardResponse board = givenBoard();
 
         given(boardService.create(any(EnrollRequest.class), any(AuthMember.class))).willReturn(board);
 
@@ -66,12 +67,14 @@ public class BoardControllerTest {
                 .andDo(print());
     }
 
-
     // 단일 조회
     @Test
     @DisplayName("boardId로 단일 조회 성공")
-    void findByBoardId() throws Exception {
+    void findByBoardIdSuccess() throws Exception {
         //given
+        BoardResponse board = givenBoard();
+
+        given(boardService.findById(any(Long.class))).willReturn(board);
 
         //andExpect
         mockMvc.perform(
