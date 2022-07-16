@@ -70,6 +70,6 @@ public class BoardQuerydslRepositoryTest {
 
         assertThat(results.getContent().size()).isEqualTo(3);
         assertThat(results.getTotalPages()).isEqualTo(1);
-        assertThat(results.getContent().get(0).getTitle()).isEqualTo(board.getTitle());
+        assertThat(results.getContent().get(0).getTitle()).isEqualTo(board3.getTitle());
     }
 }

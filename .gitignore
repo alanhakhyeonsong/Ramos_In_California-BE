@@ -9,6 +9,7 @@ build/
 **/src/main/generated/
 
 TokenUtil.java
+TokenTestHelper.java
 
 ### STS ###
 .apt_generated
