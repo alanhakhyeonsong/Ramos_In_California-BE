@@ -21,7 +21,7 @@ public class Board extends BaseEntity {
     @Column(name = "board_contents", nullable = false)
     private String contents;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "member_id")
     private Member member;
 
