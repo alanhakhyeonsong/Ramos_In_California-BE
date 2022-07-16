@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
 import ramos.InCalifornia.domain.board.entity.Board;
-import ramos.InCalifornia.domain.board.exception.BoardNotFoundException;
 import ramos.InCalifornia.domain.board.repository.BoardRepository;
 import ramos.InCalifornia.domain.member.entity.AuthMember;
 import ramos.InCalifornia.domain.member.entity.Member;
@@ -31,18 +30,5 @@ public class BoardService {
 
     private Member findMember(AuthMember authMember) {
         return memberRepository.findById(authMember.getMember().getId()).orElseThrow(MemberNotFoundException::new);
-    }
-
-    public BoardResponse findById(Long id) {
-        Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundException::new);
-        return BoardResponse.of(board);
-    }
-
-    public BoardResponse edit(Long id, EnrollRequest dto, AuthMember authMember) {
-        return null;
-    }
-
-    public void delete(Long id, AuthMember authMember) {
-
     }
 }

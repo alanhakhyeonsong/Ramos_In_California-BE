@@ -29,26 +29,17 @@ public class BoardController {
     }
 
     @GetMapping("/board/{id}")
-    public ResponseEntity<ResultResponse> findById(@PathVariable Long id) {
-        BoardResponse responseDto = boardService.findById(id);
-        ResultResponse result = ResultResponse.of(ResultCode.FIND_BOARD_SUCCESS, responseDto);
-        return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
+    public void findById(@PathVariable Long id) {
+
     }
 
     @PutMapping("/board/{id}")
-    public ResponseEntity<ResultResponse> edit(@PathVariable Long id,
-                     @RequestBody EnrollRequest dto,
-                     @AuthenticationPrincipal AuthMember authMember) {
-        BoardResponse responseDto = boardService.edit(id, dto, authMember);
-        ResultResponse result = ResultResponse.of(ResultCode.UPDATE_BOARD_SUCCESS, responseDto);
-        return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
+    public void edit(@PathVariable Long id) {
+
     }
 
     @DeleteMapping("/board/{id}")
-    public ResponseEntity<ResultResponse> delete(@PathVariable Long id,
-                       @AuthenticationPrincipal AuthMember authMember) {
-        boardService.delete(id, authMember);
-        ResultResponse result = ResultResponse.of(ResultCode.DELETE_BOARD_SUCCESS);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    public void delete(@PathVariable Long id) {
+
     }
 }
