@@ -13,7 +13,12 @@ public enum ErrorCode {
     ANONYMOUS_HAS_NOT_ID(500, "C003", "비회원의 ID는 조회 불가"),
     BAD_CREDENTIALS(400, "C004", "bad credentials"),
     METHOD_NOT_ALLOWED(405, "C005", "method not allowed"),
+    UNAUTHORIZED(401, "C006", "권한이 없습니다."),
 
+    // Auth
+    ID_PASSWORD_IS_WRONG(400, "A001", "id, password를 다시 확인해주세요."),
+    MEMBER_ALREADY_EXISTS(400, "A002", "이미 존재하는 회원입니다."),
+    TOKEN_EXPIRED(400, "A003", "토큰 유효기간 만료"),
 
     // Member
     MEMBER_NOT_FOUND(404, "M001", "등록되지 않은 사용자입니다."),
