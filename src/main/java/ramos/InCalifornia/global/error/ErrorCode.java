@@ -23,7 +23,10 @@ public enum ErrorCode {
     // Member
     MEMBER_NOT_FOUND(404, "M001", "등록되지 않은 사용자입니다."),
     NICKNAME_ALREADY_EXISTS(400, "M002", "닉네임 중복"),
-    PASSWORD_DUPLICATED(400, "M003", "이전과 같은 비밀번호입니다.");
+    PASSWORD_DUPLICATED(400, "M003", "이전과 같은 비밀번호입니다."),
+
+    // Board
+    BOARD_NOT_FOUND(404, "B001", "게시글을 찾을 수 없습니다.");
 
     private int status;
     private String code;
