@@ -7,20 +7,26 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
 import ramos.InCalifornia.domain.board.entity.Board;
 import ramos.InCalifornia.domain.board.repository.BoardRepository;
 import ramos.InCalifornia.domain.board.service.BoardService;
+import ramos.InCalifornia.domain.file.service.StorageService;
 import ramos.InCalifornia.domain.member.entity.AuthMember;
 import ramos.InCalifornia.domain.member.entity.Member;
 import ramos.InCalifornia.domain.member.entity.Role;
 import ramos.InCalifornia.domain.member.repository.MemberRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
@@ -37,6 +43,9 @@ public class BoardServiceTest {
 
     @Mock
     BoardRepository boardRepository;
+
+    @Mock
+    StorageService storageService;
 
     private Member member;
     private AuthMember authMember;
@@ -60,11 +69,23 @@ public class BoardServiceTest {
         EnrollRequest dto = givenEnrollBoard();
         Board board = dto.toEntity(member);
 
+        List<String> imagePaths = new ArrayList<>();
+
+        MockMultipartFile files = new MockMultipartFile(
+                "files",
+                "imagefile.png",
+                "image/png",
+                "<<png data>>".getBytes());
+
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(files);
+
         given(memberRepository.findById(any(Long.class))).willReturn(Optional.of(member));
         given(boardRepository.save(any(Board.class))).willReturn(board);
+        given(storageService.store(anyList())).willReturn(imagePaths);
 
         //when
-        BoardResponse result = boardService.create(dto, authMember);
+        BoardResponse result = boardService.create(dto, list, authMember);
 
         //then
         assertThat(result.getTitle()).isEqualTo(dto.getTitle());
