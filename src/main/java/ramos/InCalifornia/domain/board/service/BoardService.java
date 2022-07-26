@@ -3,20 +3,27 @@ package ramos.InCalifornia.domain.board.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
 import ramos.InCalifornia.domain.board.entity.Board;
+import ramos.InCalifornia.domain.board.entity.Image;
 import ramos.InCalifornia.domain.board.exception.BoardNotFoundException;
 import ramos.InCalifornia.domain.board.exception.NotWriterException;
 import ramos.InCalifornia.domain.board.repository.BoardRepository;
+import ramos.InCalifornia.domain.file.service.StorageService;
 import ramos.InCalifornia.domain.member.entity.AuthMember;
 import ramos.InCalifornia.domain.member.entity.Member;
 import ramos.InCalifornia.domain.member.exception.MemberNotFoundException;
 import ramos.InCalifornia.domain.member.repository.MemberRepository;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,13 +32,26 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+    private final StorageService storageService;
 
     @Transactional
-    public BoardResponse create(EnrollRequest dto, AuthMember authMember) {
+    public BoardResponse create(EnrollRequest dto, List<MultipartFile> files, AuthMember authMember) {
         Member member = findMember(authMember);
         Board board = dto.toEntity(member);
+
+        files.stream().map(MultipartFile::getContentType).filter(Predicate.not(this::isImage)).findAny().ifPresent(e -> {
+            throw new RuntimeException(); // INVALID_FILE_TYPE
+        });
+        List<String> imagePaths = storageService.store(files);
+        List<Image> images = imagePaths.stream().map(path -> Image.builder().path(path).build()).collect(Collectors.toList());
+        board.setImages(images);
+
         Board save = boardRepository.save(board);
         return BoardResponse.of(save);
+    }
+
+    private boolean isImage(String fileType) {
+        return fileType.equals(MediaType.IMAGE_JPEG_VALUE) || fileType.equals(MediaType.IMAGE_PNG_VALUE);
     }
 
     private Member findMember(AuthMember authMember) {
