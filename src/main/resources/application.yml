@@ -26,3 +26,6 @@ logging:
   level:
     org.hibernate.SQL: debug
     org.hibernate.type: trace
+
+file:
+  dir: /Users/hakhyeonsong/study/filetest/

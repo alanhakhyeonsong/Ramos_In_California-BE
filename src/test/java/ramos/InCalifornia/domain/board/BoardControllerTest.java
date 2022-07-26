@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import ramos.InCalifornia.domain.board.controller.BoardController;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
@@ -22,10 +23,12 @@ import ramos.InCalifornia.domain.member.entity.AuthMember;
 import ramos.InCalifornia.domain.member.entity.Role;
 import ramos.InCalifornia.support.WithMockAuthUser;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -66,13 +69,23 @@ public class BoardControllerTest {
 
         BoardResponse board = givenBoard();
 
-        given(boardService.create(any(EnrollRequest.class), any(AuthMember.class))).willReturn(board);
+        MockMultipartFile files = new MockMultipartFile(
+                "files",
+                "imagefile.png",
+                "image/png",
+                "<<png data>>".getBytes());
+        String contents = mapper.writeValueAsString(input);
+
+        given(boardService.create(any(EnrollRequest.class), anyList(), any(AuthMember.class))).willReturn(board);
 
         //andExpect
         mockMvc.perform(
-                post("/boards")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(input)))
+                multipart("/boards")
+                        .file(files)
+                        .file(new MockMultipartFile("dto", "", "application/json", contents.getBytes(StandardCharsets.UTF_8)))
+                        .contentType("multipart/form-data")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8"))
                 .andExpect(status().is2xxSuccessful())
                 .andDo(print());
     }
