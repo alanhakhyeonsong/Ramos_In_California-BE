@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ramos.InCalifornia.domain.board.dto.BoardDetailResponse;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
 import ramos.InCalifornia.domain.board.entity.Board;
@@ -58,9 +59,10 @@ public class BoardService {
         return memberRepository.findById(authMember.getMember().getId()).orElseThrow(MemberNotFoundException::new);
     }
 
-    public BoardResponse findById(Long id) {
+    public BoardDetailResponse findById(Long id) {
         Board board = boardRepository.findById(id).orElseThrow(BoardNotFoundException::new);
-        return BoardResponse.of(board);
+
+        return BoardDetailResponse.of(board);
     }
 
     @Transactional
@@ -85,7 +87,7 @@ public class BoardService {
     public void delete(Long id, AuthMember authMember) {
         Member writer = findMember(authMember);
         Board board = findWriter(id, writer);
-        boardRepository.deleteById(id);
+        boardRepository.deleteById(board.getId());
     }
 
     public Page<BoardResponse> findAll(Pageable pageable) {

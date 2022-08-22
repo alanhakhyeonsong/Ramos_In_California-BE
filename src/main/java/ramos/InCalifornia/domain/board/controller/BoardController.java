@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ramos.InCalifornia.domain.board.dto.BoardDetailResponse;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
 import ramos.InCalifornia.domain.board.service.BoardService;
@@ -36,7 +37,7 @@ public class BoardController {
 
     @GetMapping("/boards/{id}")
     public ResponseEntity<ResultResponse> findById(@PathVariable Long id) {
-        BoardResponse responseDto = boardService.findById(id);
+        BoardDetailResponse responseDto = boardService.findById(id);
         ResultResponse result = ResultResponse.of(ResultCode.FIND_BOARD_SUCCESS, responseDto);
         return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
     }
