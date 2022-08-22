@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,15 +18,32 @@ public class LocalStorageServiceImpl implements StorageService {
 
     public List<String> store(List<MultipartFile> files) {
         return files.stream().map(multipartFile -> {
-            String path = fileDir + multipartFile.getOriginalFilename();
-            File file = new File(path);
+            String originalFilename = multipartFile.getOriginalFilename();
+            String storeFilename = createStoreFileName(originalFilename);
+            String fullPath = getFullPath(storeFilename);
+            File file = new File(fullPath);
             try {
                 multipartFile.transferTo(file);
             } catch (IOException e) {
                 throw new RuntimeException(); // INTERNAL_SERVER_ERROR;
             }
-            return path;
+            return fullPath;
         }).collect(Collectors.toList());
+    }
+
+    private String createStoreFileName(String originalFilename) {
+        String ext = extractExt(originalFilename);
+        String uuid = UUID.randomUUID().toString();
+        return uuid + "." + ext;
+    }
+
+    private String extractExt(String originalFilename) {
+        int pos = originalFilename.lastIndexOf(".");
+        return originalFilename.substring(pos + 1);
+    }
+
+    public String getFullPath(String fileName) {
+        return fileDir + fileName;
     }
 
     public void setFileDir(String fileDir) {

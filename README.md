@@ -1,8 +1,7 @@
 # Ramos_In_California-BE
 
 ## 📌 프로젝트 목적
-2022년 8월 출국 전까지 간단하게 개인 Photo Album 블로그를 만들고자 합니다.  
-올 여름 Silicon Valley Software Technology & Innovation Program (SVSTIP) 과정에 참여하게 되어 San Jose, San Francisco를 방문 예정입니다. 현지에서의 경험을 조금 특별하게 추억하고자 출국 전 블로그 배포 후 해당 기간동안 현지 일상을 기록하고자 합니다.
+2022년 여름, 미국 현지에서의 경험을 조금 특별하게 추억하고자 만들어 보는 포토 블로그입니다. 출국 전 개발 및 배포 일정을 계획하였으나, 귀국 후 공부 목적으로 남은 기능을 개발하려 합니다.
 
 백엔드 프로젝트의 주요 목적은 **클린코드 작성 및 TDD 연습 목적으로 구현하는 Spring Boot 기반 REST API 서버입니다.** 프론트엔드는 Vue.js를 사용하여 최대한 간단하게나마 따로 구현하고자 합니다.
 
