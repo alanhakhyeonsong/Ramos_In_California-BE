@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import ramos.InCalifornia.domain.board.dto.BoardDetailResponse;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
 import ramos.InCalifornia.domain.board.entity.Board;
@@ -103,7 +104,7 @@ public class BoardServiceTest {
         given(boardRepository.findById(any(Long.class))).willReturn(Optional.of(board));
 
         //when
-        BoardResponse result = boardService.findById(1L);
+        BoardDetailResponse result = boardService.findById(1L);
 
         //then
         assertThat(result.getTitle()).isEqualTo(dto.getTitle());

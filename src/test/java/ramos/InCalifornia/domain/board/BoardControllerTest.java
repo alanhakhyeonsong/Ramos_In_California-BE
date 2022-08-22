@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import ramos.InCalifornia.domain.board.controller.BoardController;
+import ramos.InCalifornia.domain.board.dto.BoardDetailResponse;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
 import ramos.InCalifornia.domain.board.service.BoardService;
@@ -34,8 +35,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ramos.InCalifornia.support.BoardTestHelper.givenBoard;
-import static ramos.InCalifornia.support.BoardTestHelper.givenUpdateBoard;
+import static ramos.InCalifornia.support.BoardTestHelper.*;
 
 
 @WebMvcTest(controllers = BoardController.class)
@@ -94,7 +94,7 @@ public class BoardControllerTest {
     @DisplayName("boardId로 단일 조회 성공")
     void findByBoardIdSuccess() throws Exception {
         //given
-        BoardResponse board = givenBoard();
+        BoardDetailResponse board = givenDetailBoard();
 
         given(boardService.findById(any(Long.class))).willReturn(board);
 
