@@ -3,6 +3,7 @@ package ramos.InCalifornia.domain.board.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ramos.InCalifornia.domain.board.entity.Board;
+import ramos.InCalifornia.domain.board.entity.Image;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +24,7 @@ public class BoardDetailResponse {
 
     public static BoardDetailResponse of(Board board) {
         List<String> paths = board.getImages().stream()
-                .map(i -> i.getPath())
+                .map(Image::getPath)
                 .collect(Collectors.toList());
 
         return new BoardDetailResponse(board.getId(), board.getTitle(), board.getContents(), board.getUpdatedAt(),
