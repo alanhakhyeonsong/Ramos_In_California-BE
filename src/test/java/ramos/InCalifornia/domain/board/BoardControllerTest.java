@@ -19,6 +19,7 @@ import ramos.InCalifornia.domain.board.controller.BoardController;
 import ramos.InCalifornia.domain.board.dto.BoardDetailResponse;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
+import ramos.InCalifornia.domain.board.exception.FileEmptyException;
 import ramos.InCalifornia.domain.board.service.BoardService;
 import ramos.InCalifornia.domain.member.entity.AuthMember;
 import ramos.InCalifornia.domain.member.entity.Role;
@@ -87,6 +88,30 @@ public class BoardControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .characterEncoding("UTF-8"))
                 .andExpect(status().is2xxSuccessful())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 등록 실패 - 첨부 파일이 없을 경우")
+    @WithMockAuthUser(id = 1L, email = "test@test.com", role = Role.ROLE_ADMIN)
+    void postFail() throws Exception {
+        //given
+        Map<String, String> input = new HashMap<>();
+        input.put("title", "게시글 제목 테스트");
+        input.put("contents", "게시글 본문 테스트");
+
+        String contents = mapper.writeValueAsString(input);
+
+        given(boardService.create(any(EnrollRequest.class), anyList(), any(AuthMember.class))).willThrow(new FileEmptyException());
+
+        //andExpect
+        mockMvc.perform(
+                        multipart("/boards")
+                                .file(new MockMultipartFile("dto", "", "application/json", contents.getBytes(StandardCharsets.UTF_8)))
+                                .contentType("multipart/form-data")
+                                .accept(MediaType.APPLICATION_JSON)
+                                .characterEncoding("UTF-8"))
+                .andExpect(status().is4xxClientError())
                 .andDo(print());
     }
 
