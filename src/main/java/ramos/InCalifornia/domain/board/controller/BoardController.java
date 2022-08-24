@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ramos.InCalifornia.domain.board.dto.BoardDetailResponse;
 import ramos.InCalifornia.domain.board.dto.BoardResponse;
 import ramos.InCalifornia.domain.board.dto.EnrollRequest;
+import ramos.InCalifornia.domain.board.exception.FileEmptyException;
 import ramos.InCalifornia.domain.board.service.BoardService;
 import ramos.InCalifornia.domain.member.entity.AuthMember;
 import ramos.InCalifornia.global.result.ResultCode;
@@ -30,9 +31,13 @@ public class BoardController {
     public ResponseEntity<ResultResponse> enroll(@RequestPart(value = "dto") EnrollRequest dto,
                                                  @RequestPart(value = "files", required = false) List<MultipartFile> files,
                                                  @AuthenticationPrincipal AuthMember authMember) {
-        BoardResponse responseDto = boardService.create(dto, files, authMember);
-        ResultResponse result = ResultResponse.of(ResultCode.ENROLL_SUCCESS, responseDto);
-        return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
+        if (files == null)
+            throw new FileEmptyException();
+        else {
+            BoardResponse responseDto = boardService.create(dto, files, authMember);
+            ResultResponse result = ResultResponse.of(ResultCode.ENROLL_SUCCESS, responseDto);
+            return new ResponseEntity<>(result, HttpStatus.valueOf(result.getStatus()));
+        }
     }
 
     @GetMapping("/boards/{id}")
