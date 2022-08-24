@@ -27,7 +27,9 @@ public enum ErrorCode {
 
     // Board
     BOARD_NOT_FOUND(404, "B001", "게시글을 찾을 수 없습니다."),
-    NOT_WRITER(401, "B002", "작성자가 아닙니다.");
+    NOT_WRITER(401, "B002", "작성자가 아닙니다."),
+    INVALID_FILE_TYPE(401, "B003", "jpg, jpeg 형식의 이미지 파일이 아닙니다."),
+    FILE_IS_EMPTY(401, "B004", "파일을 첨부하지 않았습니다.");
 
     private int status;
     private String code;
